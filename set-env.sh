@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 if [ -z "$DOCKER_HOST_IP" ] ; then
     if [ -z "$DOCKER_HOST" ] ; then
       export DOCKER_HOST_IP=`hostname`

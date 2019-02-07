@@ -25,24 +25,37 @@ spec:
     spec:
       terminationGracePeriodSeconds: 10
       containers:
-        - name: ftgo-kafka
+      - name: ftgo-kafka
+        image: eventuateio/eventuateio-local-kafka:0.14.0
+        env:
+        - name: KAFKA_HEAP_OPTS
+          value: -Xmx320m -Xms320m
+        - name: ZOOKEEPER_SERVERS
+          value: ftgo-zookeeper:2181
+        ports:
+        - containerPort: 9092
+        volumeMounts:
+        - name: ftgo-kafka-persistent-storage
+          mountPath: /usr/local/kafka-data
+        - name: ftgo-kafka-config-volume
+          mountPath: /usr/local/kafka-config
+        - name: temp-config
+          mountPath: /temp/config
+      initContainers:
+        - name: init-myservice
           image: eventuateio/eventuateio-local-kafka:0.14.0
-          env:
-            - name: KAFKA_HEAP_OPTS
-              value: -Xmx320m -Xms320m
-            - name: ZOOKEEPER_SERVERS
-              value: ftgo-zookeeper:2181
-          ports:
-              - containerPort: 9092
+          command: ['sh', '-c', 'cp /temp/config/* /usr/local/kafka-config/']
           volumeMounts:
-            - name: ftgo-kafka-persistent-storage
-              mountPath: /usr/local/kafka-data
-            - name: ftgo-kafka-config-volume
-              mountPath: /usr/local/kafka-config
+          - name: ftgo-kafka-config-volume
+            mountPath: /usr/local/kafka-config
+          - name: temp-config
+            mountPath: /temp/config
       volumes:
-      - name: ftgo-kafka-config-volume
+      - name: temp-config
         configMap:
           name: ftgo-kafka-config
+      - name: ftgo-kafka-config-volume
+        emptyDir: {}
   volumeClaimTemplates:
   - metadata:
       name: ftgo-kafka-persistent-storage
