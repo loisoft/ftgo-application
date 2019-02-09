@@ -47,6 +47,7 @@ spec:
       resources:
         requests:
           storage: 1Gi
+      storageClassName: manual
 ---
 apiVersion: batch/v1
 kind: Job
