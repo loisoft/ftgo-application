@@ -5,6 +5,7 @@ metadata:
   labels:
     name: ftgo-kafka
 spec:
+  type: NodePort
   ports:
   - port: 9092
     targetPort: 9092
@@ -64,5 +65,4 @@ spec:
       resources:
         requests:
           storage: 1Gi
-      storageClassName: manual
 ---

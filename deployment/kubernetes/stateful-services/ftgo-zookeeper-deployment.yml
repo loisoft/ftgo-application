@@ -5,10 +5,10 @@ metadata:
   labels:
     name: ftgo-zookeeper
 spec:
+  type: NodePort
   ports:
   - port: 2181
     targetPort: 2181
-  clusterIP: None
   selector:
     role: ftgo-zookeeper
 ---

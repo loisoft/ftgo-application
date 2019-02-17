@@ -3,6 +3,7 @@ package net.chrisrichardson.ftgo.accountingservice.messaging;
 import io.eventuate.sync.AggregateRepository;
 import io.eventuate.tram.commands.consumer.CommandHandlers;
 import io.eventuate.tram.commands.consumer.CommandMessage;
+import io.eventuate.tram.messaging.common.Message;
 import io.eventuate.tram.sagas.participant.SagaCommandHandlersBuilder;
 import net.chrisrichardson.ftgo.accountingservice.domain.*;
 import net.chrisrichardson.ftgo.accountservice.api.AccountDisabledReply;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static io.eventuate.tram.commands.consumer.CommandHandlerReplyBuilder.withFailure;
+import static io.eventuate.tram.commands.consumer.CommandHandlerReplyBuilder.withSuccess;
 import static io.eventuate.tram.sagas.eventsourcingsupport.UpdatingOptionsBuilder.replyingTo;
 
 public class AccountingServiceCommandHandler {
@@ -32,7 +34,7 @@ public class AccountingServiceCommandHandler {
             .build();
   }
 
-  public void authorize(CommandMessage<AuthorizeCommand> cm) {
+  public Message authorize(CommandMessage<AuthorizeCommand> cm) {
 
     AuthorizeCommand command = cm.getCommand();
 
@@ -42,9 +44,10 @@ public class AccountingServiceCommandHandler {
                     .catching(AccountDisabledException.class, () -> withFailure(new AccountDisabledReply()))
                     .build());
 
+    return withSuccess();
   }
 
-  public void reverseAuthorization(CommandMessage<ReverseAuthorizationCommand> cm) {
+  public Message reverseAuthorization(CommandMessage<ReverseAuthorizationCommand> cm) {
 
     ReverseAuthorizationCommand command = cm.getCommand();
 
@@ -54,8 +57,10 @@ public class AccountingServiceCommandHandler {
                     .catching(AccountDisabledException.class, () -> withFailure(new AccountDisabledReply()))
                     .build());
 
+    return withSuccess();
+
   }
-  public void reviseAuthorization(CommandMessage<ReviseAuthorization> cm) {
+  public Message reviseAuthorization(CommandMessage<ReviseAuthorization> cm) {
 
     ReviseAuthorization command = cm.getCommand();
 
@@ -65,7 +70,7 @@ public class AccountingServiceCommandHandler {
                     .catching(AccountDisabledException.class, () -> withFailure(new AccountDisabledReply()))
                     .build());
 
-
+    return withSuccess();
   }
 
   private AuthorizeCommandInternal makeAuthorizeCommandInternal(AuthorizeCommand command) {

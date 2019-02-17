@@ -36,8 +36,8 @@ spec:
     spec:
       containers:
       - name: ftgo-order-service
-        image: msapatterns/ftgo-order-service:latest
-        imagePullPolicy: Always
+        image: ftgo-application_ftgo-order-service:latest
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
           name: httpport
