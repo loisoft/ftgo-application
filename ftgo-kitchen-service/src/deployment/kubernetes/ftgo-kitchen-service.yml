@@ -28,8 +28,8 @@ spec:
     spec:
       containers:
       - name: ftgo-kitchen-service
-        image: msapatterns/ftgo-kitchen-service:latest
-        imagePullPolicy: Always
+        image: ftgo-application_ftgo-kitchen-service:latest
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
           name: httpport

@@ -41,8 +41,16 @@ public class KitchenServiceCommandHandler {
     CreateTicket command = cm.getCommand();
     long restaurantId = command.getRestaurantId();
     Long ticketId = command.getOrderId();
+
     TicketDetails ticketDetails = command.getTicketDetails();
 
+    long invalid = ticketDetails.getLineItems().stream()
+            .filter(li -> li.getQuantity() > 1)
+            .count();
+
+    if (invalid > 0) {
+      return withFailure();
+    }
 
     try {
       Ticket ticket = kitchenService.createTicket(restaurantId, ticketId, ticketDetails);

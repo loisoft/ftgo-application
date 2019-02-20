@@ -54,17 +54,21 @@ public class Ticket {
   }
 
   public List<TicketDomainEvent> confirmCreate() {
-    switch (state) {
-      case CREATE_PENDING:
-        state = TicketState.AWAITING_ACCEPTANCE;
-        return singletonList(new TicketCreatedEvent(id, new TicketDetails()));
-      default:
-        throw new UnsupportedStateTransitionException(state);
-    }
+//    switch (state) {
+//      case CREATE_PENDING:
+//        state = TicketState.AWAITING_ACCEPTANCE;
+//        return singletonList(new TicketCreatedEvent(id, new TicketDetails()));
+//      default:
+//        throw new UnsupportedStateTransitionException(state);
+//    }
+    state = TicketState.AWAITING_ACCEPTANCE;
+    return singletonList(new TicketCreatedEvent(id, new TicketDetails()));
   }
 
   public List<TicketDomainEvent> cancelCreate() {
-    throw new NotYetImplementedException();
+//    throw new NotYetImplementedException();
+    this.state = TicketState.CANCELLED;
+    return emptyList();
   }
 
 
@@ -134,15 +138,18 @@ public class Ticket {
   }
 
   public List<TicketDomainEvent> cancel() {
-    switch (state) {
-      case AWAITING_ACCEPTANCE:
-      case ACCEPTED:
-        this.previousState = state;
-        this.state = TicketState.CANCEL_PENDING;
-        return emptyList();
-      default:
-        throw new UnsupportedStateTransitionException(state);
-    }
+//    switch (state) {
+//      case AWAITING_ACCEPTANCE:
+//      case ACCEPTED:
+//        this.previousState = state;
+//        this.state = TicketState.CANCEL_PENDING;
+//        return emptyList();
+//      default:
+//        throw new UnsupportedStateTransitionException(state);
+//    }
+    this.previousState = state;
+    this.state = TicketState.CANCEL_PENDING;
+    return emptyList();
   }
 
   public Long getId() {
@@ -150,14 +157,16 @@ public class Ticket {
   }
 
   public List<TicketDomainEvent> confirmCancel() {
-    switch (state) {
-      case CANCEL_PENDING:
-        this.state = TicketState.CANCELLED;
-        return singletonList(new TicketCancelled());
-      default:
-        throw new UnsupportedStateTransitionException(state);
-
-    }
+//    switch (state) {
+//      case CANCEL_PENDING:
+//        this.state = TicketState.CANCELLED;
+//        return singletonList(new TicketCancelled());
+//      default:
+//        throw new UnsupportedStateTransitionException(state);
+//
+//    }
+    this.state = TicketState.CANCELLED;
+    return singletonList(new TicketCancelled());
   }
   public List<TicketDomainEvent> undoCancel() {
     switch (state) {
